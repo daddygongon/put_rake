@@ -2,10 +2,15 @@ PATH
   remote: .
   specs:
     put_rake (0.1.0)
+      colorize
+      command_line
+      thor
 
 GEM
   remote: https://rubygems.org/
   specs:
+    colorize (0.8.1)
+    command_line (2.0.1)
     diff-lcs (1.5.0)
     rake (13.0.6)
     rspec (3.12.0)
@@ -21,6 +26,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-support (3.12.0)
+    thor (1.2.1)
 
 PLATFORMS
   arm64-darwin-20
