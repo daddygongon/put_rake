@@ -11,7 +11,7 @@ module PutRake
   class Error < StandardError; end
   # Your code goes here...
   class CLI < Thor
-    package_name 'my_help'
+    package_name 'put_rake'
     map "-v" => :version
     map "--version" => :version
 
@@ -21,7 +21,7 @@ module PutRake
       print "put_rake #{VERSION}"
     end
 
-    desc "for [EXT]", "for Rakefile about [EXT]"
+    desc "for [EXT]", "put Rakefile for [EXT]"
     def for(*args)
       gem_template_dir = File.join(File.dirname(__FILE__), 'templates')
       file = "Rakefile_#{args[0]}"
