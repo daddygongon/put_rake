@@ -1,11 +1,17 @@
+/tmp
+.DS_Store
 /.bundle/
 /.yardoc
 /_yardoc/
 /coverage/
-/doc/
+/docs/
 /pkg/
 /spec/reports/
+/vendor/
 /tmp/
+/.tags
+*~
+\#*
+.\#*
 
-# rspec failure tracking
-.rspec_status
+.ruby-version
