@@ -52,11 +52,16 @@ module PutRake
     def for(*args)
       file = "Rakefile_#{args[0]}"
       list()
-      @rake_file_path.collect do |path|
-        @file_path = path if File.basename(path) == file
+      @file_path = @rake_file_path.collect do |path|
+        path if File.basename(path) == file
       end
-      p @file_path
-      if File.exists?("./Rakefile")
+      if @file_path.size != 1 #check multiple name
+        puts "Not good argument #{args}."
+        p @file_path
+        exit
+      end
+      @file_path = @file_path[0]
+      if File.exists?("./Rakefile") # check exist and -a -f
         if options[:force]
           comm = "cp #{@file_path} ./Rakefile"
         elsif options[:add]
