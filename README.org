@@ -1,4 +1,4 @@
-- https://badge.fury.io/rb/put_rake.svg
+[[https://badge.fury.io/rb/put_rake.svg]]
 
 * PutRake
 :PROPERTIES:
