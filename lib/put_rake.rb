@@ -21,8 +21,10 @@ module PutRake
     end
 
     desc "for [EXT]", "put Rakefile for [EXT]"
-    method_option :force, :aliases => "-f", :desc => "forcely replace"
-    method_option :add, :aliases => "-a", :desc => "add on the Rakefile"
+    method_option :force, :type => :boolean, :default => false,
+                  :aliases => "-f", :desc => "forcely replace"
+    method_option :add, :type => :boolean, :default => false,
+                  :aliases => "-a", :desc => "add on the Rakefile"
     def for(*args)
       gem_template_dir = File.join(File.dirname(__FILE__), 'templates')
       file = "Rakefile_#{args[0]}"
