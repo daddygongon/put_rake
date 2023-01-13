@@ -28,5 +28,3 @@ task :git_auto do
     puts res.stdout.green
   end
 end
-
-

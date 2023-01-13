@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 require "thor"
 require "fileutils"
-require "pp"
-require "yaml"
-require "command_line/global"
 
 require_relative "put_rake/version"
 #require_relative "put_rake/cli"
+# 
+
 module PutRake
   class Error < StandardError; end
   # Your code goes here...
@@ -22,15 +21,24 @@ module PutRake
     end
 
     desc "for [EXT]", "put Rakefile for [EXT]"
+    method_option :force, :aliases => "-f", :desc => "forcely replace"
+    method_option :add, :aliases => "-a", :desc => "add on the Rakefile"
     def for(*args)
       gem_template_dir = File.join(File.dirname(__FILE__), 'templates')
       file = "Rakefile_#{args[0]}"
       if File.exists?("./Rakefile")
-        puts "Rakefile exists."
+        if options[:force]
+          comm = "cp #{File.join(gem_template_dir,file)} ./Rakefile"
+        elsif options[:add]
+          comm = "cat #{File.join(gem_template_dir,file)} >> ./Rakefile"
+        else
+          comm = "echo 'Rakefile exists. -f(orce) or -a(dd) available.'"
+        end
       else
         comm = "cp #{File.join(gem_template_dir,file)} ./Rakefile"
-        system comm
       end
+      puts comm
+      system comm
     end
 
     desc "list", "list available Rakefiles"
