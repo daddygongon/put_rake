@@ -8,9 +8,10 @@ require_relative "put_rake/version"
 
 module PutRake
   class Error < StandardError; end
+
   # Your code goes here...
   class CLI < Thor
-    package_name 'put_rake'
+    package_name "put_rake"
     map "-v" => :version
     map "--version" => :version
 
@@ -25,9 +26,9 @@ module PutRake
     def path
       additional_path = ENV["PUT_RAKE_PATH"].split(":")
       @gem_template_dirs = [
-        File.join(File.dirname(__FILE__), 'templates'),additional_path
+        File.join(File.dirname(__FILE__), "templates"), additional_path,
       ].flatten
-      puts"Rakefile template paths : #{@gem_template_dirs.join(",")}"
+      puts "* Rakefile template paths\n  #{@gem_template_dirs.join("\n  ")}"
     end
 
     desc "add PATH", "add Rakefile template PATH"
@@ -43,38 +44,48 @@ module PutRake
 
     desc "for [EXT]", "put Rakefile for [EXT]"
     method_option :force, :type => :boolean, :default => false,
-                  :aliases => "-f", :desc => "forcely replace"
+                          :aliases => "-f", :desc => "forcely replace"
     # method_option :force => false, :aliases => "-f", :desc => "forcely replace"
     method_option :add, :type => :boolean, :default => false,
-                  :aliases => "-a", :desc => "add to the Rakefile"
+                        :aliases => "-a", :desc => "add to the Rakefile"
+
     def for(*args)
       file = "Rakefile_#{args[0]}"
+      list()
+      @rake_file_path.collect do |path|
+        @file_path = path if File.basename(path) == file
+      end
+      p @file_path
       if File.exists?("./Rakefile")
         if options[:force]
-          comm = "cp #{File.join(gem_template_dir,file)} ./Rakefile"
+          comm = "cp #{@file_path} ./Rakefile"
         elsif options[:add]
-          comm = "cat #{File.join(gem_template_dir,file)} >> ./Rakefile"
+          comm = "cat #{@file_path} >> ./Rakefile"
         else
-          comm = "echo 'Rakefile exists. -f(orce) or -a(dd) available.'"
+          comm = "echo 'Rakefile exists. -f(orce) or -a(dd) option is available.'"
         end
       else
-        comm = "cp #{File.join(gem_template_dir,file)} ./Rakefile"
+        comm = "cp #{@file_path} ./Rakefile"
       end
       puts comm
       system comm
     end
 
     desc "list", "list available Rakefiles"
+
     def list
       path()
       #      gem_template_dir = File.join(File.dirname(__FILE__), 'templates')
+      @rake_file_path = []
+      puts "* Available Rakefiles"
       @gem_template_dirs.each do |gem_template_dir|
-        files = File.join(gem_template_dir,'*')
+        files = File.join(gem_template_dir, "*")
         Dir.glob(files).each do |file|
-          puts File.basename(file)
+          next if file[-1] == "~"
+          @rake_file_path << file
+          puts "  " + File.basename(file)
         end
       end
     end
-
   end
 end
