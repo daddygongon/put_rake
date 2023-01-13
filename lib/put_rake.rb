@@ -4,7 +4,7 @@ require "fileutils"
 
 require_relative "put_rake/version"
 #require_relative "put_rake/cli"
-# 
+# https://github.com/rails/thor/wiki
 
 module PutRake
   class Error < StandardError; end
@@ -23,8 +23,9 @@ module PutRake
     desc "for [EXT]", "put Rakefile for [EXT]"
     method_option :force, :type => :boolean, :default => false,
                   :aliases => "-f", :desc => "forcely replace"
+    # method_option :force => false, :aliases => "-f", :desc => "forcely replace"
     method_option :add, :type => :boolean, :default => false,
-                  :aliases => "-a", :desc => "add on the Rakefile"
+                  :aliases => "-a", :desc => "add to the Rakefile"
     def for(*args)
       gem_template_dir = File.join(File.dirname(__FILE__), 'templates')
       file = "Rakefile_#{args[0]}"
