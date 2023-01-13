@@ -20,6 +20,27 @@ module PutRake
       print "put_rake #{VERSION}"
     end
 
+    desc "path", "show Rakefile template path"
+
+    def path
+      additional_path = ENV["PUT_RAKE_PATH"].split(":")
+      @gem_template_dirs = [
+        File.join(File.dirname(__FILE__), 'templates'),additional_path
+      ].flatten
+      puts"Rakefile template paths : #{@gem_template_dirs.join(",")}"
+    end
+
+    desc "add PATH", "add Rakefile template PATH"
+
+    def add(*args)
+      add = args[0]
+      puts "Additional template paths are obtained from ENV['PUT_RAKE_PATH']."
+      puts "Add default paths, put 'setenv PUT_RAKE_PATH ...' on ~/.config/fish/fishconfig.fish."
+      p additional_path = [ENV["PUT_RAKE_PATH"].split(":"), add].join(":")
+      p comm = "setenv #{additional_path}"
+      system comm
+    end
+
     desc "for [EXT]", "put Rakefile for [EXT]"
     method_option :force, :type => :boolean, :default => false,
                   :aliases => "-f", :desc => "forcely replace"
@@ -27,7 +48,6 @@ module PutRake
     method_option :add, :type => :boolean, :default => false,
                   :aliases => "-a", :desc => "add to the Rakefile"
     def for(*args)
-      gem_template_dir = File.join(File.dirname(__FILE__), 'templates')
       file = "Rakefile_#{args[0]}"
       if File.exists?("./Rakefile")
         if options[:force]
@@ -46,10 +66,13 @@ module PutRake
 
     desc "list", "list available Rakefiles"
     def list
-      gem_template_dir = File.join(File.dirname(__FILE__), 'templates')
-      files = File.join(gem_template_dir,'*')
-      Dir.glob(files).each do |file|
-        puts File.basename(file)
+      path()
+      #      gem_template_dir = File.join(File.dirname(__FILE__), 'templates')
+      @gem_template_dirs.each do |gem_template_dir|
+        files = File.join(gem_template_dir,'*')
+        Dir.glob(files).each do |file|
+          puts File.basename(file)
+        end
       end
     end
 

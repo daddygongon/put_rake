@@ -2,7 +2,7 @@
 :PROPERTIES:
 :CUSTOM_ID: putrake
 :END:
-Put the Rakefile on the local directory
+Put a template of Rakefiles on the local directory
 
 ** Installation
 :PROPERTIES:

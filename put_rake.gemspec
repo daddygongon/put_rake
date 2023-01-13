@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["Shigeto R. Nishiani"]
   spec.email = ["daddygongon@users.noreply.github.com"]
 
-  spec.summary = "Put templates of Rakefile at the local dir."
-  spec.description = "Put templates of Rakefile at the local dir."
+  spec.summary = "Put a template of Rakefiles on the local dir."
+  spec.description = "Put a template of Rakefiles on the local dir."
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.6.0"
 
