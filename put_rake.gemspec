@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.6.0"
 
-  spec.metadata["source_code_uri"] = "https://github.com/daddygonogon/put_rake"
+  spec.metadata["source_code_uri"] = "https://github.com/daddygongon/put_rake"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
