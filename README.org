@@ -26,7 +26,13 @@ $ gem install put_rake
 :CUSTOM_ID: usage
 :END:
 
-
+#+begin_src bash
+put_rake commands:
+  put_rake for [EXT]       # put Rakefile for [EXT]
+  put_rake help [COMMAND]  # Describe available commands or one specific command
+  put_rake list            # list available Rakefiles
+  put_rake version         # show version
+#+end_src
 
 ** Development
 :PROPERTIES:
