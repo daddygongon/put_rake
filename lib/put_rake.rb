@@ -54,10 +54,13 @@ module PutRake
       list()
       @file_path = @rake_file_path.collect do |path|
         path if File.basename(path) == file
-      end
+      end.compact!
       if @file_path.size != 1 #check multiple name
-        puts "Not good argument #{args}."
-        p @file_path
+        comment = <<~"HEREDOC"
+Multiple file name #{args}: edit source Rakefile name first.\n
+#{@file_path.join("\n")}
+HEREDOC
+        puts comment
         exit
       end
       @file_path = @file_path[0]
@@ -80,15 +83,16 @@ module PutRake
 
     def list
       path()
-      #      gem_template_dir = File.join(File.dirname(__FILE__), 'templates')
       @rake_file_path = []
       puts "* Available Rakefiles"
+      puts "%10s: %s" % ["EXT", "full path"]
       @gem_template_dirs.each do |gem_template_dir|
         files = File.join(gem_template_dir, "*")
         Dir.glob(files).each do |file|
           next if file[-1] == "~"
           @rake_file_path << file
-          puts "  " + File.basename(file)
+          key = file.match(/Rakefile_(.*)/)[1]
+          puts "%10s: %s" % [key, file]
         end
       end
     end
