@@ -36,12 +36,12 @@ The default templates are located on the install directory of libs,
 #+begin_src bash
 > put_rake path
 * Rakefile template paths
-  /Users/bob/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/put_rake-0.1.3/lib/templates
+  /Users/hoge/.rbenv/versions/3.0.2/lib/ruby/gems/3.0.0/gems/put_rake-0.1.3/lib/templates
 #+end_src
 and the additionals can be located any path which is specified
 by the following command:
 #+begin_src bash
-put_rake add /Users/bob/bin/Rakefiles
+put_rake add /Users/hoge/bin/Rakefiles
 #+end_src
 
 Happy Ruby.
