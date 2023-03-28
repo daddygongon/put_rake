@@ -23,7 +23,6 @@ module PutRake
     end
 
     desc "path", "show Rakefile template path"
-
     def path
       additional_path = ENV["PUT_RAKE_PATH"].split(":")
       @gem_template_dirs = [
@@ -33,7 +32,6 @@ module PutRake
     end
 
     desc "add PATH", "add Rakefile template PATH"
-
     def add(*args)
       add = args[0]
       puts "Additional template paths are obtained from ENV['PUT_RAKE_PATH']."
@@ -86,7 +84,7 @@ HEREDOC
       path()
       @rake_file_path = []
       puts "* Available Rakefiles"
-      puts "%10s: %s" % ["EXT", "full path"]
+      puts "%20s: %s" % ["EXT", "some description"]
       @gem_template_dirs.each do |gem_template_dir|
         puts "** #{gem_template_dir}"
         files = File.join(gem_template_dir, "*")
