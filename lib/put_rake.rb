@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require "thor"
 require "fileutils"
+require 'command_line/global'
 
 require_relative "put_rake/version"
 #require_relative "put_rake/cli"
@@ -87,12 +88,19 @@ HEREDOC
       puts "* Available Rakefiles"
       puts "%10s: %s" % ["EXT", "full path"]
       @gem_template_dirs.each do |gem_template_dir|
+        puts "** #{gem_template_dir}"
         files = File.join(gem_template_dir, "*")
         Dir.glob(files).each do |file|
           next if file[-1] == "~"
           @rake_file_path << file
           key = file.match(/Rakefile_(.*)/)[1]
-          puts "%10s: %s" % [key, file]
+          res = command_line "rake -T -f #{file}"
+          command = res.stdout.split("\n")[0]
+          if command
+            puts "%20s: %s" % [key, command.scan(/#.+/)[0]]
+          else
+            puts "%20s: %s" % [key, File.basename(file)]
+          end
         end
       end
     end
