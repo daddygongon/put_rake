@@ -24,7 +24,7 @@ module PutRake
 
     desc "path", "show Rakefile template path"
     def path
-      tmp = ENV["PUT_RAKE_PATH"] || [""]
+      tmp = ENV["PUT_RAKE_PATH"] || ""
       additional_path = tmp.split(":")
       @gem_template_dirs = [
         File.join(File.dirname(__FILE__), "templates"), additional_path,
