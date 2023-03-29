@@ -64,7 +64,7 @@ HEREDOC
         exit
       end
       @file_path = @file_path[0]
-      if File.exists?("./Rakefile") # check exist and -a -f
+      if File.exist?("./Rakefile") # check exist and -a -f
         if options[:force]
           comm = "cp #{@file_path} ./Rakefile"
         elsif options[:add]
