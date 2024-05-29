@@ -91,6 +91,7 @@ HEREDOC
         files = File.join(gem_template_dir, "*")
         Dir.glob(files).each do |file|
           next if file[-1] == "~"
+          next unless File.basename(file) =~ /^Rakefile/
           @rake_file_path << file
           key = file.match(/Rakefile_(.*)/)[1]
           res = command_line "rake -T -f #{file}"
