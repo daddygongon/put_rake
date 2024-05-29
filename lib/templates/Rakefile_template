@@ -7,7 +7,7 @@ task :default do
 end
 
 namespace :some_name_space do
-  desc "task desciption" #desc -> descriptin
+  desc "task description" #desc -> description
   task :task_name do # any name on task_name
     # your code goes
   end
