@@ -95,9 +95,11 @@ HEREDOC
           @rake_file_path << file
           key = file.match(/Rakefile_(.*)/)[1]
           res = command_line "rake -T -f #{file}"
-          command = res.stdout.split("\n")[0]
-          if command
-            puts "%20s: %s" % [key, command.scan(/#.+/)[0]]
+          command = res.stdout.split("\n").collect do |line|
+            line.include?(key) ? line : nil
+          end
+          if command.compact[0] != nil
+            puts "%20s: %s" % [key, command.compact[0].scan(/#.+/)[0]]
           else
             puts "%20s: %s" % [key, File.basename(file)]
           end
