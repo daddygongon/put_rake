@@ -32,14 +32,17 @@ module PutRake
       puts "* Rakefile template paths\n  #{@gem_template_dirs.join("\n  ")}"
     end
 
-    desc "add PATH", "add Rakefile template PATH"
+    desc "add PATH", "How to add Rakefile template PATH"
     def add(*args)
       add = args[0]
       puts "Additional template paths are obtained from ENV['PUT_RAKE_PATH']."
-      puts "Add default paths, put 'setenv PUT_RAKE_PATH ...' on ~/.config/fish/fishconfig.fish."
-      p additional_path = [ENV["PUT_RAKE_PATH"].split(":"), add].join(":")
-      p comm = "setenv #{additional_path}"
-      system comm
+      ENV["PUT_RAKE_PATH"] ||= ''
+      p additional_path = [add, ENV["PUT_RAKE_PATH"].split(" ")].join(" ")
+      puts "Add default paths, put 
+\'setenv PUT_RAKE_PATH \'#{additional_path}\'\' 
+on ~/.config/fish/fishconfig.fish."
+#      p comm = "set -Ux PUT_RAKE_PATH \'#{additional_path}\'"
+#      system comm
     end
 
     desc "for [EXT]", "put Rakefile for [EXT]"
