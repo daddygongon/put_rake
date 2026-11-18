@@ -27,6 +27,7 @@ put_rake commands:
   put_rake for [EXT]       # put Rakefile for [EXT]
   put_rake help [COMMAND]  # Describe available commands or one specific command
   put_rake list            # list available Rakefiles
+  put_rake migrate         # rename legacy Rakefile_* templates to *.rake
   put_rake path            # show Rakefile template path
   put_rake version         # show version
 #+end_src
@@ -43,6 +44,18 @@ by the following command:
 #+begin_src bash
 put_rake add /Users/hoge/bin/Rakefiles
 #+end_src
+
+New templates should use the =NAME.rake= naming convention.  The legacy
+=Rakefile_NAME= convention remains available for backward compatibility.
+Legacy templates in the default and additional template paths can be renamed
+with:
+#+begin_src bash
+put_rake migrate --dry-run
+put_rake migrate
+#+end_src
+
+If =NAME.rake= already exists, the corresponding =Rakefile_NAME= is skipped
+without being overwritten.
 
 Happy Ruby.
 

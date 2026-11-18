@@ -24,11 +24,7 @@ module PutRake
 
     desc "path", "show Rakefile template path"
     def path
-      tmp = ENV["PUT_RAKE_PATH"] || ""
-      additional_path = tmp.split(":")
-      @gem_template_dirs = [
-        File.join(File.dirname(__FILE__), "templates"), additional_path,
-      ].flatten
+      @gem_template_dirs = template_dirs
       puts "* Rakefile template paths\n  #{@gem_template_dirs.join("\n  ")}"
     end
 
@@ -53,11 +49,11 @@ on ~/.config/fish/fishconfig.fish."
                         :aliases => "-a", :desc => "add to the Rakefile"
 
     def for(*args)
-      file = "Rakefile_#{args[0]}"
+      files = ["#{args[0]}.rake", "Rakefile_#{args[0]}"]
       list()
-      @file_path = @rake_file_path.collect do |path|
-        path if File.basename(path) == file
-      end.compact!
+      @file_path = @rake_file_path.select do |path|
+        files.include?(File.basename(path))
+      end
       if @file_path.size != 1 #check multiple name
         comment = <<~"HEREDOC"
 Multiple file name #{args}: edit source Rakefile name first.\n
@@ -82,6 +78,37 @@ HEREDOC
       system comm
     end
 
+    desc "migrate", "rename legacy Rakefile_* templates to *.rake"
+    method_option :dry_run, :type => :boolean, :default => false,
+                            :aliases => "-n", :desc => "show changes without renaming"
+
+    def migrate
+      puts options[:dry_run] ? "* Template migration (dry run)" : "* Template migration"
+
+      template_dirs.each do |template_dir|
+        puts "** #{template_dir}"
+        unless Dir.exist?(template_dir)
+          puts "   skipped: directory does not exist"
+          next
+        end
+
+        Dir.glob(File.join(template_dir, "Rakefile_*")).sort.each do |source|
+          next unless File.file?(source)
+          next if source.end_with?("~")
+
+          key = legacy_template_key(source)
+          destination = File.join(template_dir, "#{key}.rake")
+
+          if File.exist?(destination)
+            puts "   skipped: #{File.basename(source)} -> #{File.basename(destination)} (destination exists)"
+          else
+            puts "   #{File.basename(source)} -> #{File.basename(destination)}"
+            FileUtils.mv(source, destination) unless options[:dry_run]
+          end
+        end
+      end
+    end
+
     desc "list", "list available Rakefiles"
 
     def list
@@ -94,9 +121,12 @@ HEREDOC
         files = File.join(gem_template_dir, "*")
         Dir.glob(files).each do |file|
           next if file[-1] == "~"
-          next unless File.basename(file) =~ /^Rakefile/
+          next unless File.file?(file)
+
+          key = template_key(file)
+          next unless key
+
           @rake_file_path << file
-          key = file.match(/Rakefile_(.*)/)[1]
           res = command_line "rake -T -f #{file}"
           command = res.stdout.split("\n").collect do |line|
             line.include?(key) ? line : nil
@@ -107,6 +137,25 @@ HEREDOC
             puts "%20s: %s" % [key, File.basename(file)]
           end
         end
+      end
+    end
+
+    no_commands do
+      def template_dirs
+        additional_paths = (ENV["PUT_RAKE_PATH"] || "").split(":").reject(&:empty?)
+        [File.join(File.dirname(__FILE__), "templates"), *additional_paths].uniq
+      end
+
+      def legacy_template_key(file)
+        File.basename(file).delete_prefix("Rakefile_")
+      end
+
+      def template_key(file)
+        basename = File.basename(file)
+        return legacy_template_key(file) if basename.start_with?("Rakefile_")
+        return File.basename(file, ".rake") if File.extname(file) == ".rake"
+
+        nil
       end
     end
   end
